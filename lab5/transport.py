@@ -8,6 +8,14 @@ c_0 = nmp.array([
     [5, 1, 2],
 ])
 
+a_1 = nmp.array([0, 0, 0])
+b_1 = nmp.array([0, 0, 0])
+c_1 = nmp.array([
+    [0, 0, 0],
+    [0, 0, 0],
+    [0, 0, 0],
+])
+
 
 def solve_transport(a: nmp.ndarray, b: nmp.ndarray, c: nmp.ndarray) -> nmp.ndarray:
     if a.sum() != b.sum():
@@ -105,8 +113,10 @@ def get_uv(c: nmp.ndarray, x: nmp.ndarray, a_size, b_size):
     equations = nmp.array(equations)
     b = nmp.array(b)
 
-    res = nmp.linalg.solve(equations, b)
-
+    if len(equations) == 0:
+        res = nmp.zeros(a_size + b_size - 1)
+    else:
+        res = nmp.linalg.solve(equations, b)
     u = [0]
     for i in range(a_size - 1):
         u.append(res[i])
@@ -118,8 +128,8 @@ def get_uv(c: nmp.ndarray, x: nmp.ndarray, a_size, b_size):
     return u, v
 
 
-x_r = nw_corner(a_0, b_0)
+# x_r = nw_corner(a_0, b_0)
 
-u_r, v_r = get_uv(c_0, x_r, 3, 3)
+# u_r, v_r = get_uv(c_0, x_r, 3, 3)
 
-print(solve_transport(a_0, b_0, c_0))
+print(solve_transport(a_1, b_1, c_1))

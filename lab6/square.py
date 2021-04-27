@@ -63,27 +63,33 @@ def solve_square(a: nmp.ndarray, b: nmp.ndarray, c: nmp.ndarray, d: nmp.ndarray,
         elif j_t in nmp.setdiff1d(j_s, j_base):
             j_s = nmp.setdiff1d(j_s, [j_t])
             continue
+        else:
+            res, j = check_case_c(j_t, j_base, j_s, a_b_r, a)
+            if res:
+
+                continue
         return
 
 
-def check_case_c(j_t: int, j_base: nmp.ndarray, j_s: nmp.ndarray, a_b_r: nmp.ndarray, a: nmp.ndarray) -> bool:
+def check_case_c(j_t: int, j_base: nmp.ndarray, j_s: nmp.ndarray, a_b_r: nmp.ndarray, a: nmp.ndarray):
     part = nmp.setdiff1d(j_s, j_base)
     if len(part) == 0:
-        return False
+        return False, -1
 
     mask = nmp.in1d(j_base, [j_t])
     s_l = nmp.arange(len(mask))[mask]
 
     if len(s_l) == 0:
-        return False
+        return False, -1
 
     for s in s_l:
         s_v = a_b_r[s]
         j_plus_v = s_v.dot(a[:, part])
-        if (j_plus_v != 0).any():
-            return True
+        for j in range(len(j_plus_v)):
+            if j_plus_v[j] != 0:
+                return True, j
 
-    return False
+    return False, -1
 
 
 _a = nmp.array([
